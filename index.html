@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading Prediction Model Explorer…</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: #003366;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 2rem;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    p {
+      font-size: 1rem;
+      opacity: 0.75;
+    }
+
+    .spinner {
+      width: 52px;
+      height: 52px;
+      border: 5px solid rgba(255,255,255,0.2);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .fallback {
+      display: none;
+      text-align: center;
+    }
+
+    .fallback a {
+      color: #7ec8ff;
+      text-decoration: underline;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="spinner"></div>
+  <h1>Prediction Model Explorer</h1>
+  <p>Routing you to an available server…</p>
+
+  <div class="fallback" id="fallback">
+    <p>If you are not redirected automatically, click a link below:</p>
+    <br>
+    <p><a id="link1" href="#">Server 1</a></p>
+    <br>
+    <p><a id="link2" href="#">Server 2</a></p>
+  </div>
+
+  <script>
+    // ── UPDATE THESE TWO URLS AFTER CREATING YOUR HF SPACES ──
+    const spaces = [
+      "https://huggingface.co/spaces/YOUR_USERNAME/prediction-model-explorer-1",
+      "https://huggingface.co/spaces/YOUR_USERNAME/prediction-model-explorer-2"
+    ];
+    // ─────────────────────────────────────────────────────────
+
+    // Even split by hashing current minute — ensures roughly equal load
+    // even if many students click at the same time
+    const bucket = Math.floor(Date.now() / 60000) % 2;
+    const roll   = Math.random() < 0.5 ? 0 : 1;
+    const target = spaces[(bucket + roll) % 2];
+
+    // Set fallback links
+    document.getElementById("link1").href = spaces[0];
+    document.getElementById("link2").href = spaces[1];
+
+    // Show fallback after 4s in case redirect is blocked
+    setTimeout(() => {
+      document.getElementById("fallback").style.display = "block";
+    }, 4000);
+
+    // Redirect
+    window.location.href = target;
+  </script>
+
+</body>
+</html>
