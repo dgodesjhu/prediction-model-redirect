@@ -70,7 +70,6 @@
   </div>
 
   <script>
-    // ── UPDATE THESE TWO URLS AFTER CREATING YOUR HF SPACES ──
     const spaces = [
       "https://prediction-model-aim26.streamlit.app",
       "https://prediction-model2-aim26.streamlit.app",
@@ -85,23 +84,20 @@
     ];
     // ─────────────────────────────────────────────────────────
 
-    // Even split by hashing current minute — ensures roughly equal load
-    // even if many students click at the same time
-    const bucket = Math.floor(Date.now() / 60000) % 2;
-    const roll   = Math.random() < 0.5 ? 0 : 1;
-    const target = spaces[(bucket + roll) % 2];
+    // Pure random across all 10
+  const target = spaces[Math.floor(Math.random() * spaces.length)];
 
-    // Set fallback links
-    document.getElementById("link1").href = spaces[0];
-    document.getElementById("link2").href = spaces[1];
+  // Fallback links
+  spaces.forEach((url, i) => {
+    const el = document.getElementById("link" + (i + 1));
+    if (el) el.href = url;
+  });
 
-    // Show fallback after 4s in case redirect is blocked
-    setTimeout(() => {
-      document.getElementById("fallback").style.display = "block";
-    }, 4000);
+  setTimeout(() => {
+    document.getElementById("fallback").style.display = "block";
+  }, 4000);
 
-    // Redirect
-    window.location.href = target;
+  window.location.href = target;
   </script>
 
 </body>
